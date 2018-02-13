@@ -9,12 +9,14 @@ GEM
       descendants_tracker (~> 0.0.1)
     descendants_tracker (0.0.4)
       thread_safe (~> 0.3, >= 0.3.1)
+    dotenv (2.2.1)
     equalizer (0.0.11)
     faraday (0.14.0)
       multipart-post (>= 1.2, < 3)
     ice_nine (0.11.2)
     inflecto (0.0.2)
     multipart-post (2.0.0)
+    sequel (5.5.0)
     telegram-bot-ruby (0.8.6.1)
       faraday
       inflecto
@@ -30,6 +32,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  dotenv
+  sequel
   telegram-bot-ruby
 
 BUNDLED WITH

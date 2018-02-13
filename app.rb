@@ -1,7 +1,10 @@
+require 'dotenv/load'
+require 'logger'
 require 'telegram/bot'
-require './variables'
+require 'sequel'
+require './config'
 
-Telegram::Bot::Client.run(TOKEN) do |bot|
+Telegram::Bot::Client.run(token) do |bot|
   bot.listen do |message|
     case message.text
     when '/start'
@@ -18,7 +21,7 @@ Telegram::Bot::Client.run(TOKEN) do |bot|
       bot.api.send_message(
         chat_id: message.chat.id,
         text: 'Тут буде рейтинг'
-    )  
+    )
     else
       bot.api.send_message(
         chat_id: message.chat.id,
