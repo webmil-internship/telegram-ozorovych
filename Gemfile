@@ -4,4 +4,5 @@ source 'https://rubygems.org'
 
 gem 'dotenv'
 gem 'sequel'
+gem 'sqlite3', '~> 1.3', '>= 1.3.11'
 gem 'telegram-bot-ruby'
