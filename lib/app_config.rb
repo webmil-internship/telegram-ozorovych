@@ -6,12 +6,20 @@ class AppConfigurator
     setup_database
   end
 
-  def get_token
+  def token
     ENV['TOKEN']
   end
 
-  def get_users
-    users = setup_database[:users]
+  def users
+    setup_database[:users]
+  end
+
+  def tasks
+    setup_database[:tasks]
+  end
+
+  def ratings
+    setup_database[:ratings]
   end
 
   private

@@ -8,5 +8,5 @@ namespace :db do
     db = Sequel.connect(ENV.fetch('DATABASE_CONNECTION'))
     puts 'Migrating to latest'
     Sequel::Migrator.run(db, 'db/migrations')
-    end
   end
+end
