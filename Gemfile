@@ -3,6 +3,7 @@
 source 'https://rubygems.org'
 
 gem 'dotenv'
+gem 'rest-client'
 gem 'rufus-scheduler'
 gem 'sequel'
 gem 'sqlite3', '~> 1.3', '>= 1.3.11'

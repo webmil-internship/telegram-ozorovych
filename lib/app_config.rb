@@ -1,13 +1,35 @@
+require 'dotenv/load'
+require 'json'
+require 'net/http'
+require 'rest-client'
+require 'sequel'
 require 'telegram/bot'
-require './lib/db_config'
-
+# Define vars, connect to DB
 class AppConfigurator
-  def configure
-    setup_database
+  # Constants
+  def token
+    ENV['TELEGRAM_API_TOKEN']
   end
 
-  def token
-    ENV['TOKEN']
+  def tg_api_path
+    ENV['TELEGRAM_API_PATH']
+  end
+
+  def mscv
+    ENV['MS_COMPUTERVISION_KEY']
+  end
+
+  def method_name
+    ENV['METHOD_NAME']
+  end
+
+  def param_name
+    ENV['PARAM_NAME']
+  end
+
+  # Database
+  def configure
+    setup_database
   end
 
   def users
@@ -25,6 +47,6 @@ class AppConfigurator
   private
 
   def setup_database
-    DatabaseConnector.establish_connection
+    Sequel.connect(ENV.fetch('DATABASE_CONNECTION'))
   end
 end
