@@ -32,6 +32,7 @@ class AppConfigurator
     setup_database
   end
 
+  # Models
   def users
     setup_database[:users]
   end

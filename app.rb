@@ -4,9 +4,9 @@ require './lib/sender'
 config = AppConfigurator.new
 config.configure
 
-token = config.token
-mscv_key = config.mscv
+tg_token = config.token
 tg_api_path = config.tg_api_path
+mscv_key = config.mscv
 method_name = config.method_name
 param_name = config.param_name
 
@@ -14,15 +14,15 @@ bot = Telegram::Bot::Client
 users = config.users
 tasks = config.tasks
 
-bot.run(token) do |bot|
+bot.run(tg_token) do |bot|
   bot.listen do |message|
     if message.photo.any?
       photo = message.photo.last
-      get_file_url = "#{tg_api_path}/bot#{token}/#{method_name}?#{param_name}=#{photo.file_id}"
+      get_file_url = "#{tg_api_path}/bot#{tg_token}/#{method_name}?#{param_name}=#{photo.file_id}"
       json_response = RestClient.get(get_file_url).body
       response = JSON.parse(json_response)
       file_path = response.dig("result", "file_path")
-      file_url = "#{tg_api_path}/file/bot#{token}/#{file_path}"
+      file_url = "#{tg_api_path}/file/bot#{tg_token}/#{file_path}"
       uri = URI('https://westcentralus.api.cognitive.microsoft.com/vision/v1.0/analyze')
       uri.query = URI.encode_www_form({
           'visualFeatures' => 'Tags',
@@ -51,22 +51,28 @@ bot.run(token) do |bot|
     else
       case message.text
       when '/start'
-        # TODO: Check if users already in game, if not - add to DB and send it:
-        users.insert(user_id: message.from.id, chat_id: message.chat.id)
-        bot.api.send_message(
-          chat_id: message.chat.id,
-          text: "Привіт, #{message.from.first_name}. Давай зіграємо в гру.\nВведи /help, щоб ознайомитися із правилами"
-      )
+        # if message.from.id.to_s == users.where(user_id: message.from.id).first[:user_id]
+        #  bot.api.send_message(
+        #    chat_id: message.chat.id,
+        #    text: "Ти вже в грі.\nВведи /help, щоб ознайомитися із правилами"
+        #  )
+        # else
+          users.insert(user_id: message.from.id, chat_id: message.chat.id)
+          bot.api.send_message(
+            chat_id: message.chat.id,
+            text: "Привіт, #{message.from.first_name}. Давай зіграємо в гру.\nВведи /help, щоб ознайомитися із правилами"
+          )
+        # end
       when '/help'
         bot.api.send_message(
           chat_id: message.chat.id,
           text: 'Тут буде текст, який пояснюватиме правила гри і показуватиме всі доступні команди'
-      )
+        )
       when '/rating'
         bot.api.send_message(
           chat_id: message.chat.id,
           text: 'Тут буде рейтинг'
-      )
+        )
       when '/stop'
         users.where(user_id: message.from.id).delete
         bot.api.send_message(
