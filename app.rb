@@ -1,4 +1,5 @@
 require './lib/app_config'
+require './lib/sender'
 
 config = AppConfigurator.new
 config.configure
@@ -6,6 +7,9 @@ config.configure
 token = config.token
 users = config.users
 tasks = config.tasks
+
+#sender = Sender.new
+#sender.task
 
 Telegram::Bot::Client.run(token) do |bot|
   bot.listen do |message|
@@ -34,8 +38,8 @@ Telegram::Bot::Client.run(token) do |bot|
         bot.api.send_message(
           chat_id: message.chat.id,
           text: "#{tasks.all}"
-      ) 
-      puts tasks.all 
+      )
+      puts tasks.all
       when '/stop'
         # TODO: Add method to remove all associated data from tables
         bot.api.send_message(
