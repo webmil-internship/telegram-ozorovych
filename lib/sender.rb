@@ -1,20 +1,30 @@
 require 'rufus-scheduler'
-require './lib/app_config'
+require_relative 'app_config'
 
-token = ENV['TELEGRAM_API_TOKEN']
+class Sender
+  attr_accessor :tg_token, :scheduler, :bot, :users, :tasks
 
-scheduler = Rufus::Scheduler.new
+  def initialize
+    @scheduler = Rufus::Scheduler.new
+    config = AppConfigurator.new
+    config.configure
 
-db = Sequel.connect(ENV.fetch('DATABASE_CONNECTION'))
-bot = Telegram::Bot::Client
-users = db[:users]
-tasks = db[:tasks]
+    @tg_token = config.token
+    @bot = Telegram::Bot::Client
+    @users = config.users
+    @tasks = config.tasks
+    @shedule = config.shedule
+  end
 
-bot.run(token) do |bot|
-  scheduler.every '10m', first: :now do
-    users.each do |user|
+  def run
+    bot.run(tg_token) do |bot|
+    scheduler.every '10m', first: :now do
       random_task = tasks.where(id: rand(1..tasks.count)).first[:description]
-      bot.api.send_message(chat_id: user[:chat_id], text: "Сьогоднішнє завдання — зробити фото, на якому буде #{random_task}")
+
+      users.each do |user|
+        bot.api.send_message(chat_id: user[:chat_id], text: "Сьогоднішнє завдання — зробити фото, на якому буде #{random_task}")
+      end
     end
   end
+end
 end

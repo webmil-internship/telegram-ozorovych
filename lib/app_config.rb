@@ -4,6 +4,7 @@ require 'net/http'
 require 'rest-client'
 require 'sequel'
 require 'telegram/bot'
+
 # Define vars, connect to DB
 class AppConfigurator
   # Constants
@@ -43,6 +44,10 @@ class AppConfigurator
 
   def ratings
     setup_database[:ratings]
+  end
+
+  def schedule
+    setup_database[:schedule]
   end
 
   private
