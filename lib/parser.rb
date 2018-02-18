@@ -1,21 +1,16 @@
 require_relative 'app_config'
-
 class Parser
-  attr_accessor :message
-  def initialize(message)
-    config = AppConfigurator.new
-    config.configure
-
-    @mscv_key = config.mscv
-    @method_name = config.method_name
-    @param_name = config.param_name
-
+  attr_accessor :message, :photo, :uri, :mscv_key, :tg_api_path, :tg_token
+  def initialize
+    @tg_token = ENV['TELEGRAM_API_TOKEN']
+    @tg_api_path = ENV['TELEGRAM_API_PATH']
+    @mscv_key = ENV['MS_COMPUTERVISION_KEY']
+    @uri = URI('https://westcentralus.api.cognitive.microsoft.com/vision/v1.0/analyze')
     @message = message
-    @photo = message.photo.last
+    @photo = photo
   end
 
   def send_photo
-    uri = URI('https://westcentralus.api.cognitive.microsoft.com/vision/v1.0/analyze')
     uri.query = URI.encode_www_form({
         'visualFeatures' => 'Tags',
         'language' => 'en'
@@ -24,18 +19,21 @@ class Parser
     request['Content-Type'] = 'application/json'
     request['Ocp-Apim-Subscription-Key'] = mscv_key
     request.body = "{\"url\": \"#{file_url}\"}"
+  end
 
-    response = Net::HTTP.start(uri.host, uri.port, :use_ssl => uri.scheme == 'https') do |http|
+  def receive_responce
+    Net::HTTP.start(uri.host, uri.port, :use_ssl => uri.scheme == 'https') do |http|
       http.request(request)
     end
   end
 
   private
-  def file_url
-    get_file_url = "#{tg_api_path}/bot#{tg_token}/#{method_name}?#{param_name}=#{photo.file_id}"
+
+  def file_url(file_id)
+    get_file_url = "#{tg_api_path}/bot#{tg_token}/getFile?file_id=#{file_id}"
     json_response = RestClient.get(get_file_url).body
     response = JSON.parse(json_response)
     file_path = response.dig("result", "file_path")
-    file_url = "#{tg_api_path}/file/bot#{tg_token}/#{file_path}"
+    "#{tg_api_path}/file/bot#{tg_token}/#{file_path}"
   end
 end

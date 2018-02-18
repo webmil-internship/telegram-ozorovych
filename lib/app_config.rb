@@ -2,8 +2,13 @@ require 'dotenv/load'
 require 'json'
 require 'net/http'
 require 'rest-client'
+require 'rufus-scheduler'
 require 'sequel'
 require 'telegram/bot'
+require './db/db_setup'
+require './models/user'
+require './models/task'
+require './models/schedule'
 
 # Define vars, connect to DB
 class AppConfigurator
@@ -34,25 +39,22 @@ class AppConfigurator
   end
 
   # Models
-  def users
-    setup_database[:users]
-  end
-
-  def tasks
-    setup_database[:tasks]
+  def user
+    User.find(user_id: message.from.id)
   end
 
   def ratings
     setup_database[:ratings]
   end
 
-  def schedule
-    setup_database[:schedule]
-  end
+  #def schedule
+  #  setup_database[:schedule]
+  #end
 
   private
 
   def setup_database
     Sequel.connect(ENV.fetch('DATABASE_CONNECTION'))
+    # Sequel::Model.raise_on_save_failure = false
   end
 end
