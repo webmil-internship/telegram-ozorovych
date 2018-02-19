@@ -25,7 +25,7 @@ class Parser
     request['Ocp-Apim-Subscription-Key'] = mscv_key
     request.body = "{\"url\": \"#{file_url}\"}"
 
-    response = Net::HTTP.start(uri.host, uri.port, :use_ssl => uri.scheme == 'https') do |http|
+    response = Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == 'https') do |http|
       http.request(request)
     end
     json = JSON.parse(response.body)

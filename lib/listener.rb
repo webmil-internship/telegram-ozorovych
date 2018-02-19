@@ -1,5 +1,5 @@
 class Listener
-  attr_accessor :tg_token, :tg_api_path, :mscv_key, :bot, :message, :tasks, :sender
+  attr_accessor :tg_token, :tg_api_path, :mscv_key, :bot, :message, :tasks, :sender, :rating
 
   def initialize
     config = AppConfigurator.new
@@ -10,6 +10,7 @@ class Listener
     @bot = Telegram::Bot::Client
     @message = message
     @sender = Sender.new
+    @rating = Ratinger.new
   end
 
   def run
@@ -34,7 +35,7 @@ class Listener
               responder.help
             end
           when '/rating'
-            responder.rating
+            rating.today
           when '/stop'
             responder.stop_game
             user.delete
