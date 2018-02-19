@@ -1,4 +1,3 @@
-# All stuff for responding to users should be here
 class Responder
   HELPMSG = 'Тут буде текст, який пояснюватиме правила гри і показуватиме всі доступні команди'
   STOPMSG = 'Ти виходиш з гри. Щоб повернутися — знову введи /start. Але зауваж — весь твій прогрес буде втрачено...'
@@ -40,9 +39,7 @@ class Responder
   def file_error
     bot.api.send_message(
       chat_id: message.chat.id,
-      text: 'Не підходить. Будь ласка надішліть файл у форматі jpg'
+      text:  PHOTOERRORMSG
     )
   end
-
-  private
 end

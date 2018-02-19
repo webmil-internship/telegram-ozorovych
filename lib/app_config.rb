@@ -6,9 +6,15 @@ require 'rufus-scheduler'
 require 'sequel'
 require 'telegram/bot'
 require './db/db_setup'
-require './models/user'
-require './models/task'
+require './models/rating'
 require './models/schedule'
+require './models/task'
+require './models/user'
+require_relative 'parser'
+require_relative 'pathfinder'
+require_relative 'responder'
+require_relative 'sender'
+require_relative 'tasksheduler'
 
 # Define vars, connect to DB
 class AppConfigurator
