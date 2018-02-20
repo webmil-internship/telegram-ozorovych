@@ -33,11 +33,7 @@ class Listener
               responder.help
             end
           when '/rating'
-            bot.api.send_message(
-              chat_id: message.chat.id,
-              text: Ratinger.new.show
-            )
-            # Ratinger.new.show
+            responder.rating
           when '/stop'
             responder.stop_game
             user.delete

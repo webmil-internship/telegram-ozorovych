@@ -4,6 +4,7 @@ class Ratinger
     if todays_tag.nil?
       'No rating for today yet'
     else
+      # TODO: Refactor using join or relations
       n = 0
       todays_task = Task.find(tag: todays_tag.tag)
       rating = Rating.where(task_id: todays_task.id).order(:propability).reverse
