@@ -47,16 +47,8 @@ class AppConfigurator
 
   # Models
   def user
-    User.find(user_id: message.from.id)
+    User.find(chat_id: message.from.id)
   end
-
-  def ratings
-    setup_database[:ratings]
-  end
-
-  #def schedule
-  #  setup_database[:schedule]
-  #end
 
   private
 

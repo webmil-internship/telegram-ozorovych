@@ -1,13 +1,19 @@
 class Responder
-  HELPMSG = 'Тут буде текст, який пояснюватиме правила гри і показуватиме всі доступні команди'
+  HELPMSG = 'Доступні команди:
+  /start - початок гри
+  /stop - вихід з гри
+  /rating - вивід рейтинга
+  /help - цей текст'
   STOPMSG = 'Ти виходиш з гри. Щоб повернутися — знову введи /start. Але зауваж — весь твій прогрес буде втрачено...'
   PHOTOERRORMSG = 'Не підходить. Будь ласка надішліть файл у форматі jpg'
+  SENDERRORMSG = 'Ви уже надсилали фото, дочекайтесь наступного раунду гри'
 
   attr_accessor :bot, :message
   def initialize(bot, message)
     @bot = bot
     @message = message
   end
+
   def start_game
     bot.api.send_message(
       chat_id: message.chat.id,
@@ -25,7 +31,7 @@ class Responder
   def rating
     bot.api.send_message(
       chat_id: message.chat.id,
-      text: 'Тут буде рейтинг'
+      text: 'rating'
     )
   end
 
@@ -39,7 +45,14 @@ class Responder
   def file_error
     bot.api.send_message(
       chat_id: message.chat.id,
-      text:  PHOTOERRORMSG
+      text: PHOTOERRORMSG
+    )
+  end
+
+  def send_error
+    bot.api.send_message(
+      chat_id: message.chat.id,
+      text: SENDERRORMSG
     )
   end
 end

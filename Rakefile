@@ -1,6 +1,6 @@
 require 'dotenv/load'
 require 'sequel'
-# Sequel.extension :migration
+Sequel.extension :migration
 # Sequel.extension :seed
 
 db = Sequel.connect(ENV.fetch('DATABASE_CONNECTION'))

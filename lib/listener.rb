@@ -17,8 +17,9 @@ class Listener
     sender.run
     bot.run(tg_token) do |bot|
       bot.listen do |message|
-        user = User.find(user_id: message.from.id)
+        user = User.find(chat_id: message.from.id)
         responder = Responder.new(bot, message)
+        # responder.send_error if user.nil?
         if message.photo.any?
           photo = message.photo.last
           parser = Parser.new
@@ -30,12 +31,17 @@ class Listener
           when '/start'
             if user.nil?
               responder.start_game
-              User.create(user_id: message.from.id, chat_id: message.chat.id)
+              User.create(user_name: "#{message.from.first_name} #{message.from.last_name}",
+                          chat_id: message.chat.id)
             else
               responder.help
             end
           when '/rating'
-            rating.today
+            # bot.api.send_message(
+            #  chat_id: message.chat.id,
+            #  text: rating.show
+            # )
+            rating.show
           when '/stop'
             responder.stop_game
             user.delete

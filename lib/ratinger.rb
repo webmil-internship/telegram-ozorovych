@@ -2,14 +2,19 @@
 # Sort records by confidence
 # Build list
 class Ratinger
-  def today
-    todays_task = Schedule.find(date: Date.today)
-    todays_task.nil?
-    if todays_task.nil?
-      puts 'no task for today'
+  def show
+    todays_tag = Schedule.find(date: Date.today)
+    if todays_tag.nil?
+      'No rating for today yet'
     else
-      puts todays_task.id
-      puts Rating.find(task_id: todays_task.id)
+      n = 0
+      todays_task = Task.find(tag: todays_tag.tag)
+      rating = Rating.where(task_id: todays_task.id).order(:propability).reverse
+      rating.each do |rate|
+        user = User.find(id: rate.user_id)
+        n += 1
+        "#{n}: #{user.user_name} - #{rate.propability}"
+      end
     end
   end
 end
