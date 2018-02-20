@@ -1,5 +1,6 @@
 class Parser
-  attr_accessor :message, :photo, :uri, :mscv_key, :tg_api_path, :tg_token, :task, :user
+  attr_reader :mscv_key, :tg_api_path, :tg_token
+  attr_accessor :message, :photo, :uri, :task, :user
   def initialize
     @tg_token = ENV['TELEGRAM_API_TOKEN']
     @tg_api_path = ENV['TELEGRAM_API_PATH']
@@ -10,7 +11,7 @@ class Parser
     @user = user
   end
 
-  def run(photo, user)
+  def run(photo, user) # TODO: divide into smaller methods
     get_file_url = "#{tg_api_path}/bot#{tg_token}/getFile?file_id=#{photo.file_id}"
     json_response = RestClient.get(get_file_url).body
     response = JSON.parse(json_response)
@@ -20,6 +21,7 @@ class Parser
         'visualFeatures' => 'Tags',
         'language' => 'en'
     })
+
     request = Net::HTTP::Post.new(uri.request_uri)
     request['Content-Type'] = 'application/json'
     request['Ocp-Apim-Subscription-Key'] = mscv_key

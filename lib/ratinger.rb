@@ -1,6 +1,3 @@
-# Select all records of current day
-# Sort records by confidence
-# Build list
 class Ratinger
   def show
     todays_tag = Schedule.find(date: Date.today)
