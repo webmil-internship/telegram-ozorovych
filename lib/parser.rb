@@ -34,8 +34,10 @@ class Parser
     tags = json['tags']
     tags.each do |tag|
       task = Tasksheduler.new
+      # TODO: Show error if submitted photo contains no task tag
       if tag['name'] == task.tag
         Rating.create(user_id: user[:id], task_id: task.id, propability: tag['confidence'])
+      else responder.wrong_photo
       end
     end
   end

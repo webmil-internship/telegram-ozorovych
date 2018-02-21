@@ -1,6 +1,10 @@
 class Tasksheduler
   def description
-    create.description
+    if create.nil?
+      'No task for today'
+    else
+      create.description
+    end
   end
 
   def tag
@@ -16,7 +20,7 @@ class Tasksheduler
   def create
     todays = Schedule.find(date: Date.today)
     if Schedule.find(date: Date.today).nil?
-    'current_tag is empty'
+    nil
     # Raise error
     # Function to add task to schedule and return message to user
     else
